@@ -1,18 +1,31 @@
+import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-import math
+import json
+
+# load json manually
+with open("internetdata.json") as f:
+    my_file = json.load(f)
+
+income = []
+internet = []
+
+for row in my_file:
+    inc = row["incomeperperson"]
+    net = row["internetuserate"]
+    income.append(inc)
+    internet.append(net)
+
+income = np.array(income)
+internet = np.array(internet)
+
+over_10000 = internet[income > 10000]
+under_10000 = internet[income < 10000]
 
 
-data = pd.read_json("internetdata.json")
-
-over_10000_series = data[data["incomeperperson"]>10000]
-under_10000_series = data[data["incomeperperson"]<10000]
-#print(over_10000_series)
-plt.xticks(rotation=90)
-plt.hist(over_10000_series["internetuserate"])
+plt.hist(over_10000)
 plt.savefig("hist2.png")
 plt.show()
-plt.hist(under_10000_series["internetuserate"])
+
+plt.hist(under_10000)
 plt.savefig("hist1.png")
 plt.show()
-#print(data)

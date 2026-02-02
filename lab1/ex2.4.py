@@ -1,6 +1,6 @@
 import timeit
 counter_start = False
-moby = open("pg2701.txt", 'r') #make sure files in same directory
+moby = open("pg2701.txt", 'r',encoding="utf-8") #make sure files in same directory
 vowels = ['a', 'e', 'i', 'o', 'u', 'y', 'A', 'E', 'I', 'O', 'U', 'Y']
 def time_fn(my_array):
     execution_count =100
@@ -19,9 +19,7 @@ def build_array():
                 my_array.append(my_string)
                 my_string = ''  
         else:
-            my_string = my_string + i       
-
-    #print(my_array[2500])
+            my_string = my_string + i
     moby.close()
     return my_array
 
@@ -37,8 +35,9 @@ def count_vowels(passed_array):
                 #print(k)
     #print(counter)
     return counter
-my_array = build_array()
-my_counter = count_vowels(my_array)
 
-time_fn(my_array)
+if __name__ == "__main__":
+    my_array = build_array()
+    my_counter = count_vowels(my_array)
+    time_fn(my_array)
             

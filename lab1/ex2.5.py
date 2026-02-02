@@ -22,11 +22,14 @@ def find_size(input_dict):
 			#print(i)
 			find_size(input_dict[i])
 
+if __name__ == "__main__":
+	f = open("large-file.json", "r")
+	data = f.read()
+	json_data = json.loads(data)
+	f.close()
 
-f = open("large-file.json", "r")
-data = f.read()
-json_data = json.loads(data)
-f.close()
+
+#Timeit Code
 execution_count = 10
 execution_time_array = []
 execution_time_array.append(timeit.timeit(lambda:tree_traversal_and_replace(json_data),number=execution_count)/execution_count)
