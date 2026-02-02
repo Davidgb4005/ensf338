@@ -48,3 +48,4 @@ plt.show()
 plt.plot(x_axis,execution_time[1])
 plt.savefig("lab2/ex1.6.1.png")
 plt.show()
+
