@@ -43,8 +43,8 @@ for j in range(execution_number):
     print(execution_time[0][j],"  ",execution_time[1][k])
 
 plt.plot(x_axis,execution_time[0])
-plt.savefig("ex1.6.2.png")
+plt.savefig("lab2/ex1.6.2.png")
 plt.show()
 plt.plot(x_axis,execution_time[1])
-plt.savefig("ex1.6.2.png")
+plt.savefig("lab2/ex1.6.1.png")
 plt.show()
