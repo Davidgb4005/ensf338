@@ -11,45 +11,32 @@ execution_count = 100 #100 timit number
 execution_amount = 1000 #1000 For loop
 element_count = [1000,2000,8000,16000,32000]
 
-"""Binary Search (Logarithmic Fit)
+"""1. Implement linear search and binary search
+Linear search was implemented by iterating through each element in the sorted array until the target value was found. Binary search was implemented recursively by repeatedly dividing the array in half, comparing the middle element to the target, and continuing the search in the appropriate half until the value was found or the subarray was empty.
 
-Type of function: Logarithmic function 
+2. Measure the performance of each on sorted vectors
+For each array size (1000, 2000, 4000, 8000, 16000, 32000 elements), a random element was selected 1000 times. The time to find the element was measured using timeit with 100 iterations per measurement. The average runtime for each search method was computed across all measurements. This process allows comparison of the performance of linear and binary search as the array size increases.
+
+3. Interpolate the data points
+
+Linear search data was fitted with a linear function 
+t(n)=mn+c
+t(n)=mn+c, reflecting its expected 
+O(n)
+O(n) time complexity.
+
+Binary search data was fitted with a logarithmic function 
 t(n)=aln⁡(bn)+c
-t(n)=aln(bn)+c, corresponding to 
+t(n)=aln(bn)+c, reflecting its expected 
 O(log⁡n)
 O(logn) complexity.
+Curve fitting was performed using scipy.optimize.curve_fit(). The fits provide a visual and quantitative confirmation of the theoretical complexity of each algorithm.
 
-Parameters:
-
-a: scales the runtime with log(n)
-
-b: horizontal scaling inside the logarithm
-
-c: constant overhead due to function call and array slicing
-
-Observation: Runtime grows very slowly as array size increases, as expected for binary search. The logarithmic fit captures this trend accurately.
-
-Linear Search (Linear Fit)
-
-Type of function: Linear function 
-t(n)=mn+c
-t(n)=mn+c, corresponding to 
-O(n)
-O(n) complexity.
-
-Parameters:
-
-m (slope): time added per additional element
-
-c (intercept): fixed overhead from loop setup and function call
-
-Observation: Runtime increases proportionally with array size, matching the expected linear behavior.
-
-Binary search is significantly faster than linear search for large arrays.
-
-The results align with theoretical time complexities.
-
-Small deviations are due to recursion and array slicing overhead in the binary search implementation."""
+4. Discuss the results
+Linear Search: The interpolating function is linear, with slope m representing the time added per additional element and intercept c representing fixed overhead. Runtime increases proportionally with array size, matching expectations.
+Binary Search: The interpolating function is logarithmic, with parameters a (scales the growth of log(n)), b (horizontal scaling), and c (constant overhead). Runtime grows slowly as array size increases, consistent with 
+O(log⁡n)
+O(logn) complexity. The results match theoretical expectations, although small overheads from recursion and array slicing slightly increase observed times."""
 
 def build_array(n):
     my_array = np.empty(n)
