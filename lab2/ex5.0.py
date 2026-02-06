@@ -10,6 +10,47 @@ linear_search_array_outer = []
 execution_count = 100 #100 timit number
 execution_amount = 1000 #1000 For loop
 element_count = [1000,2000,8000,16000,32000]
+
+"""Binary Search (Logarithmic Fit)
+
+Type of function: Logarithmic function 
+t(n)=aln⁡(bn)+c
+t(n)=aln(bn)+c, corresponding to 
+O(log⁡n)
+O(logn) complexity.
+
+Parameters:
+
+a: scales the runtime with log(n)
+
+b: horizontal scaling inside the logarithm
+
+c: constant overhead due to function call and array slicing
+
+Observation: Runtime grows very slowly as array size increases, as expected for binary search. The logarithmic fit captures this trend accurately.
+
+Linear Search (Linear Fit)
+
+Type of function: Linear function 
+t(n)=mn+c
+t(n)=mn+c, corresponding to 
+O(n)
+O(n) complexity.
+
+Parameters:
+
+m (slope): time added per additional element
+
+c (intercept): fixed overhead from loop setup and function call
+
+Observation: Runtime increases proportionally with array size, matching the expected linear behavior.
+
+Binary search is significantly faster than linear search for large arrays.
+
+The results align with theoretical time complexities.
+
+Small deviations are due to recursion and array slicing overhead in the binary search implementation."""
+
 def build_array(n):
     my_array = np.empty(n)
     #my_array = []
