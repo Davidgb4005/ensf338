@@ -1,6 +1,5 @@
 import timeit
 import cProfile as cp
-import re
 
 def sub_function(n):
 #sub function that calculates the factorial of n
@@ -8,7 +7,7 @@ def sub_function(n):
         return 1
     else:
         return n * sub_function(n-1)
-def test_function():
+def bests_function():
     data = []
     for i in range(10):
         data.append(sub_function(i))
@@ -19,7 +18,7 @@ def third_function():
 
 profiler = cp.Profile()
 profiler.enable()
-test_function()
+bests_function()
 third_function()
 profiler.disable()
 profiler.print_stats(sort="tottime")

@@ -55,20 +55,29 @@ def linear_search(my_array,search_value):
             return
     print("Does Not Exist")
 
-def binary_search(my_array,search_value):
-    if len(my_array)<= 0:
-        print("Does not exist in array")
-        return
-    split_point = len(my_array)//2
-    split_value = my_array[split_point]
-    if split_value > search_value:
-        binary_search(my_array[0:split_point],search_value)
-    elif split_value < search_value:
-        binary_search(my_array[split_point+1:len(my_array)],search_value)
-    else:
-        pass
-        #print(search_value," Was Found At ",my_array[split_point])
+def binary_search(my_array, search_value, low=0, high=None):
+    if high is None:
+        high = len(my_array) - 1
 
+    if low > high:
+        return None
+
+    mid = (low + high) // 2
+
+    if my_array[mid] > search_value:
+        return binary_search(my_array, search_value, low, mid - 1)
+    elif my_array[mid] < search_value:
+        return binary_search(my_array, search_value, mid + 1, high)
+    else:
+        return mid
+
+
+my_array = build_array(20)
+search_value = my_array[rd.randint(0, len(my_array)) - 1]
+offset = binary_search(my_array,search_value)
+print(my_array)
+print(offset+10," ",search_value," ",my_array[offset])
+exit()
 def b_search_timeit():
     binary_search_array = []
     global binary_search_array_outer
@@ -102,7 +111,7 @@ def l_search_timeit():
         linear_search_array_outer.append(linear_search_array)
         linear_search_array = []
     print("l search done")
-
+"""
 ThreadIt = False 
 if ThreadIt:
     b_search_thread = threading.Thread(target= b_search_timeit)
@@ -111,9 +120,9 @@ if ThreadIt:
     l_search_thread.start()
     b_search_thread.join()
     l_search_thread.join()
-else:
-    b_search_timeit()
-    l_search_timeit()
+"""
+b_search_timeit()
+#l_search_timeit()
 
 linear_search_array_avg = []
 binary_search_array_avg = []
