@@ -2,11 +2,7 @@ import timeit
 import matplotlib.pyplot as plt
 
 
-def func(n):
-    if n == 0 or n == 1:
-        return n
-    else:
-        return func(n-1) + func(n-2)
+
     
 # 1.The following code takes an input integer of n and then checks to see
 #   if the value is ethier 0 or 1 if not it creates subproblems where it adds the
@@ -23,7 +19,14 @@ def func(n):
 
 # 3. O(2^n)
 
-# 4.
+
+def func(n):
+    if n == 0 or n == 1:
+        return n
+    else:
+        return func(n-1) + func(n-2)
+
+
 def memo(n, memo_dict={}):
     if n == 0 or n == 1:
         return n
@@ -35,7 +38,6 @@ def memo(n, memo_dict={}):
 
 # 5. O(n)
 
-# 6. 
 
 times_func = []
 values_func = []
@@ -52,6 +54,7 @@ plt.ylabel("Time to Excute")
 plt.title("Time to Excute vs Value of the Function")
 plt.grid(True)
 plt.savefig("ex1.6.1.jpg")
+print(values_func,times_func)
 plt.show()
 plt.close()
 

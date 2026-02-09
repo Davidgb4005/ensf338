@@ -10,6 +10,34 @@ linear_search_array_outer = []
 execution_count = 100 #100 timit number
 execution_amount = 1000 #1000 For loop
 element_count = [1000,2000,8000,16000,32000]
+
+"""1. Implement linear search and binary search
+Linear search was implemented by iterating through each element in the sorted array until the target value was found. Binary search was implemented recursively by repeatedly dividing the array in half, comparing the middle element to the target, and continuing the search in the appropriate half until the value was found or the subarray was empty.
+
+2. Measure the performance of each on sorted vectors
+For each array size (1000, 2000, 4000, 8000, 16000, 32000 elements), a random element was selected 1000 times. The time to find the element was measured using timeit with 100 iterations per measurement. The average runtime for each search method was computed across all measurements. This process allows comparison of the performance of linear and binary search as the array size increases.
+
+3. Interpolate the data points
+
+Linear search data was fitted with a linear function 
+t(n)=mn+c
+t(n)=mn+c, reflecting its expected 
+O(n)
+O(n) time complexity.
+
+Binary search data was fitted with a logarithmic function 
+t(n)=aln⁡(bn)+c
+t(n)=aln(bn)+c, reflecting its expected 
+O(log⁡n)
+O(logn) complexity.
+Curve fitting was performed using scipy.optimize.curve_fit(). The fits provide a visual and quantitative confirmation of the theoretical complexity of each algorithm.
+
+4. Discuss the results
+Linear Search: The interpolating function is linear, with slope m representing the time added per additional element and intercept c representing fixed overhead. Runtime increases proportionally with array size, matching expectations.
+Binary Search: The interpolating function is logarithmic, with parameters a (scales the growth of log(n)), b (horizontal scaling), and c (constant overhead). Runtime grows slowly as array size increases, consistent with 
+O(log⁡n)
+O(logn) complexity. The results match theoretical expectations, although small overheads from recursion."""
+
 def build_array(n):
     my_array = np.empty(n)
     #my_array = []
@@ -27,19 +55,21 @@ def linear_search(my_array,search_value):
             return
     print("Does Not Exist")
 
-def binary_search(my_array,search_value):
-    if len(my_array)<= 0:
-        print("Does not exist in array")
-        return
-    split_point = len(my_array)//2
-    split_value = my_array[split_point]
-    if split_value > search_value:
-        binary_search(my_array[0:split_point],search_value)
-    elif split_value < search_value:
-        binary_search(my_array[split_point+1:len(my_array)],search_value)
+def binary_search(my_array, search_value, low=0, high=None):
+    if high is None:
+        high = len(my_array) - 1
+
+    if low > high:
+        return None
+
+    mid = (low + high) // 2
+
+    if my_array[mid] > search_value:
+        return binary_search(my_array, search_value, low, mid - 1)
+    elif my_array[mid] < search_value:
+        return binary_search(my_array, search_value, mid + 1, high)
     else:
-        pass
-        #print(search_value," Was Found At ",my_array[split_point])
+        return mid
 
 def b_search_timeit():
     binary_search_array = []
@@ -74,7 +104,7 @@ def l_search_timeit():
         linear_search_array_outer.append(linear_search_array)
         linear_search_array = []
     print("l search done")
-
+"""
 ThreadIt = False 
 if ThreadIt:
     b_search_thread = threading.Thread(target= b_search_timeit)
@@ -83,15 +113,17 @@ if ThreadIt:
     l_search_thread.start()
     b_search_thread.join()
     l_search_thread.join()
-else:
-    b_search_timeit()
-    l_search_timeit()
+"""
+b_search_timeit()
+l_search_timeit()
 
 linear_search_array_avg = []
 binary_search_array_avg = []
 linear_search_values = []
 binary_search_values = []
 element_count_values = []
+
+#Binary Serach
 avg = 0
 for k in range(len(binary_search_array_outer)):
     for i in binary_search_array_outer[k]:
@@ -103,7 +135,7 @@ for k in range(len(binary_search_array_outer)):
     #print("B search avg: ",avg)
     avg = 0
 
-#print(element_count_values)
+#Linear Search
 avg = 0
 for k in linear_search_array_outer:
     for i in k:
@@ -113,7 +145,7 @@ for k in linear_search_array_outer:
     #print("Lin search avg: ",avg)
     avg = 0
 
-
+#Graphing And Curve Fitting
 p0 = [2,0, 0] 
 plt.rcParams['figure.figsize'] = [10, 5]
 ln = lambda x,a,b,c:(a * np.log(b * x) + c)
