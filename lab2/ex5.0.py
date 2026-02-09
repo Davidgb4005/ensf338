@@ -36,7 +36,7 @@ Curve fitting was performed using scipy.optimize.curve_fit(). The fits provide a
 Linear Search: The interpolating function is linear, with slope m representing the time added per additional element and intercept c representing fixed overhead. Runtime increases proportionally with array size, matching expectations.
 Binary Search: The interpolating function is logarithmic, with parameters a (scales the growth of log(n)), b (horizontal scaling), and c (constant overhead). Runtime grows slowly as array size increases, consistent with 
 O(log⁡n)
-O(logn) complexity. The results match theoretical expectations, although small overheads from recursion and array slicing slightly increase observed times."""
+O(logn) complexity. The results match theoretical expectations, although small overheads from recursion."""
 
 def build_array(n):
     my_array = np.empty(n)
@@ -71,13 +71,6 @@ def binary_search(my_array, search_value, low=0, high=None):
     else:
         return mid
 
-
-my_array = build_array(20)
-search_value = my_array[rd.randint(0, len(my_array)) - 1]
-offset = binary_search(my_array,search_value)
-print(my_array)
-print(offset+10," ",search_value," ",my_array[offset])
-exit()
 def b_search_timeit():
     binary_search_array = []
     global binary_search_array_outer
@@ -122,13 +115,15 @@ if ThreadIt:
     l_search_thread.join()
 """
 b_search_timeit()
-#l_search_timeit()
+l_search_timeit()
 
 linear_search_array_avg = []
 binary_search_array_avg = []
 linear_search_values = []
 binary_search_values = []
 element_count_values = []
+
+#Binary Serach
 avg = 0
 for k in range(len(binary_search_array_outer)):
     for i in binary_search_array_outer[k]:
@@ -140,7 +135,7 @@ for k in range(len(binary_search_array_outer)):
     #print("B search avg: ",avg)
     avg = 0
 
-#print(element_count_values)
+#Linear Search
 avg = 0
 for k in linear_search_array_outer:
     for i in k:
@@ -150,7 +145,7 @@ for k in linear_search_array_outer:
     #print("Lin search avg: ",avg)
     avg = 0
 
-
+#Graphing And Curve Fitting
 p0 = [2,0, 0] 
 plt.rcParams['figure.figsize'] = [10, 5]
 ln = lambda x,a,b,c:(a * np.log(b * x) + c)
