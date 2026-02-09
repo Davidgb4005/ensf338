@@ -70,7 +70,6 @@ plt.plot(vector_sizes, binary_search_times, 'o-', label='Binary Search', color='
 plt.title('Binary Search Performance')
 plt.xlabel('Vector Size')
 plt.ylabel('Time (seconds)')
-plt.xscale('log')
 plt.yscale('log')
 
 # Fit binary search data to a logarithmic function (O(log n) behavior)
