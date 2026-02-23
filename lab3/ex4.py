@@ -35,13 +35,14 @@ def quicks_sort_optimize(my_array):
             while my_array[j] == my_array_i and j > i:
                 j = j - 1 
                 pre_sort = pre_sort + 1
+                pre_sort_right +=1;
             if my_array[j]<my_array[i]:
                 pre_sort_right = 0
                 pre_sort_left = 0
             tmp = my_array[j]
             my_array[j] = my_array_i 
             my_array[i] = tmp
-    if pre_sort > size-1:
+    if pre_sort >= size-1:
         #print("Pre Sorted Length: ",size-1," ", my_array)
         return
     if pre_sort_left < size -1:
@@ -77,99 +78,208 @@ def quicks_sort(my_array):
             my_array[i] = tmp
     quicks_sort(my_array[:i])
     quicks_sort(my_array[i+1:])
-    
+
 if False:
     for i in range(1000):
         dummy_array = []
         for i in range(1000):
-            dummy_array.append(rd.randint(0,10000000))
+            dummy_array.append(rd.randint(0,10))
         dummy_np_array = np.array(dummy_array)
         dummy_array_2 = dummy_np_array.copy()
         quicks_sort_optimize(dummy_array_2)
-        print(np.equal(np.sort(dummy_np_array),dummy_array_2).all())
+        if not(np.equal(np.sort(dummy_np_array),dummy_array_2).all()):
+            print("False")
     exit()
 #######################################
 ##ALL TESTING/PLOTTING CODE PAST HERE##
 ######################################
+if False:#Test Case 1
+    set_size = (400,800,1200,1600,2000,2500,5000)
+    set_span = (0,1,2,3,4,10,100000000)
 
-set_size = (400,800,1200,1600,2000,2500,3000)
-set_span = (0,1,2,3,4,10,1000000)
+    optimized_array_2d = []
+    unoptimized_array_2d = []
 
-optimized_array_2d = []
-unoptimized_array_2d = []
+    for span_idx, span in enumerate(set_span):
+        optimized_times = []
+        unoptimized_times = []
 
-for span_idx, span in enumerate(set_span):
-    optimized_times = []
-    unoptimized_times = []
+        for size in set_size:
+            dummy_array = [rd.randint(0, span) for test in range(size)]
+            my_array = np.array(dummy_array)
 
-    for size in set_size:
-        dummy_array = [rd.randint(0, span) for test in range(size)]
-        my_array = np.array(dummy_array)
-
-        optimized_times.append(timeit.timeit(lambda: quicks_sort_optimize(my_array.copy()), number=10)/10)
-        unoptimized_times.append(timeit.timeit(lambda: quicks_sort(my_array.copy()), number=10)/10)
-        print(size ," SIZE DONE")
-    optimized_array_2d.append(optimized_times)
-    unoptimized_array_2d.append(unoptimized_times)
-    print(span," SPAN DONE")
-fig, axs = plt.subplots(1, 2, figsize=(14,5))
-
-
-for i, span in enumerate(set_span):
-    axs[0].scatter(set_size,optimized_array_2d[i], label=f"Span={span}")
-
-axs[0].set_ylabel("Time (s)")
-axs[0].set_xlabel("Set size")
-axs[0].set_title("Optimized Quicksort")
-#axs[0].set_xlim(x_min, x_max)
-#axs[0].set_ylim(y_min, y_max)
-axs[0].legend()
-
-coeffs = np.polyfit(set_size, unoptimized_array_2d[0], 2)
-x_smooth = np.linspace(min(set_size), max(set_size), 200)
-y_smooth = np.polyval(coeffs, x_smooth)
-eqn_ins = f"{coeffs[0]:.1e}x² + {coeffs[1]:.1e}x + {coeffs[2]:.1e}"
-axs[1].plot(x_smooth, y_smooth, color='blue',label=f"Insertion Sort Fit: {eqn_ins}")
-for i, span in enumerate(set_span):
-    axs[1].scatter(set_size, unoptimized_array_2d[i], label=f"Span={span}")
-
-axs[1].set_ylabel("Time (s)")
-axs[1].set_xlabel("Set size")
-axs[1].set_title("Unoptimized Quicksort")
-#axs[1].set_xlim(x_min, x_max)
-#axs[1].set_ylim(y_min, y_max)
-axs[1].legend()
-
-plt.show()
+            optimized_times.append(timeit.timeit(lambda: quicks_sort_optimize(my_array.copy()), number=10)/10)
+            unoptimized_times.append(timeit.timeit(lambda: quicks_sort(my_array.copy()), number=10)/10)
+            print(size ," SIZE DONE")
+        optimized_array_2d.append(optimized_times)
+        unoptimized_array_2d.append(unoptimized_times)
+        print(span," SPAN DONE")
+    fig, axs = plt.subplots(1, 2, figsize=(14,5))
 
 
-set_size = (100,500,1000,1500,3000,4000,5000,6000)
-set_span = (0,1,2,4,8,16,32,100000)
+    for i, span in enumerate(set_span):
+        axs[0].scatter(set_size,optimized_array_2d[i], label=f"Interval=[0:{span}]")
 
-optimized_array_2d = []
+    x_vals = np.array(set_size)
+    y_opt = np.array(optimized_array_2d[1])
+    nlogn = x_vals * np.log2(x_vals)
+    coeff_opt = np.polyfit(nlogn, y_opt, 1)
 
-for span_idx, span in enumerate(set_span):
-    optimized_times = []
+    x_smooth = np.linspace(min(set_size), max(set_size), 200)
+    y_opt_smooth = coeff_opt[0] * (x_smooth * np.log2(x_smooth)) + coeff_opt[1]
+    axs[0].plot(x_smooth, y_opt_smooth,
+                color='orange',
+                linewidth=1)
+    y_opt = np.array(optimized_array_2d[3])
+    nlogn = x_vals * np.log2(x_vals)
+    coeff_opt = np.polyfit(nlogn, y_opt, 1)
 
-    for size in set_size:
-        dummy_array = [rd.randint(0, max(1, span)) for test in range(size)]
-        my_array = np.array(dummy_array)
+    x_smooth = np.linspace(min(set_size), max(set_size), 200)
+    y_opt_smooth = coeff_opt[0] * (x_smooth * np.log2(x_smooth)) + coeff_opt[1]
+    axs[0].plot(x_smooth, y_opt_smooth,
+                color='red',
+                linewidth=1)
+    axs[0].set_ylabel("Time (s)")
+    axs[0].set_xlabel("Set size")
+    axs[0].set_title("Optimized Quicksort")
+    #axs[0].set_xlim(x_min, x_max)
+    #axs[0].set_ylim(y_min, y_max)
+    axs[0].legend()
 
-        t = timeit.timeit(lambda: quicks_sort_optimize(my_array.copy()), number=10)/10
-        optimized_times.append(t)
-        print(size ,"SIZE DONE")
+    coeffs = np.polyfit(set_size, unoptimized_array_2d[0], 2)
+    x_smooth = np.linspace(min(set_size), max(set_size), 200)
+    y_smooth = np.polyval(coeffs, x_smooth)
+    eqn_ins = f"{coeffs[0]:.1e}x² + {coeffs[1]:.1e}x + {coeffs[2]:.1e}"
+    axs[1].plot(x_smooth, y_smooth, color='blue',label=f"Interval[0:0] Fit(n^2): {eqn_ins}")
+    for i, span in enumerate(set_span):
+        axs[1].scatter(set_size, unoptimized_array_2d[i], label=f"Span={span}")
 
-    optimized_array_2d.append(optimized_times)
-    print(span,"SPAN DONE")
+    # Unoptimized: fit to n log n as well (same theory)
+    y_unopt = np.array(unoptimized_array_2d[3])
+    coeff_unopt = np.polyfit(nlogn, y_unopt, 1)
 
-# Plot
-fig, axs = plt.subplots(1, 1, figsize=(10,6))
+    y_unopt_smooth = coeff_unopt[0] * (x_smooth * np.log2(x_smooth)) + coeff_unopt[1]
 
-for i, span in enumerate(set_span):
-    axs.scatter(set_size, optimized_array_2d[i], label=f"Span={span}")
+    axs[1].plot(x_smooth, y_unopt_smooth,
+                color='red',
+                linewidth=1
+                )
+    axs[1].set_ylabel("Time (s)")
+    axs[1].set_xlabel("Set size")
+    axs[1].set_title("Unoptimized Quicksort")
+    #axs[1].set_xlim(x_min, x_max)
+    #axs[1].set_ylim(y_min, y_max)
+    axs[1].legend()
 
-axs.set_xlabel("Set size")
-axs.set_ylabel("Time (s)")
-axs.set_title("Optimized Quicksort Timing")
-axs.legend()
-plt.show()
+    plt.show()
+
+if True:#TestCase 2
+    set_size = (4000,8000,12000,16000,20000,25000,50000)
+    set_span = (1000000,1000000,1000000,1000000,1000000,1000000,10000000)
+
+    optimized_array_2d = []
+    unoptimized_array_2d = []
+
+    for span_idx, span in enumerate(set_span):
+        optimized_times = []
+        unoptimized_times = []
+
+        for size in set_size:
+            dummy_array = [rd.randint(0, span) for test in range(size)]
+            my_array = np.array(dummy_array)
+
+            optimized_times.append(timeit.timeit(lambda: quicks_sort_optimize(my_array.copy()), number=10)/10)
+            unoptimized_times.append(timeit.timeit(lambda: quicks_sort(my_array.copy()), number=10)/10)
+            print(size ," SIZE DONE")
+        optimized_array_2d.append(optimized_times)
+        unoptimized_array_2d.append(unoptimized_times)
+        print(span," SPAN DONE")
+    fig, axs = plt.subplots(1, 2, figsize=(14,5))
+
+
+    for i, span in enumerate(set_span):
+        axs[0].scatter(set_size,optimized_array_2d[i], label=f"Interval=[0:{span}]")
+
+    x_vals = np.array(set_size)
+    y_opt = np.array(optimized_array_2d[1])
+    nlogn = x_vals * np.log2(x_vals)
+    coeff_opt = np.polyfit(nlogn, y_opt, 1)
+
+    x_smooth = np.linspace(min(set_size), max(set_size), 200)
+    y_opt_smooth = coeff_opt[0] * (x_smooth * np.log2(x_smooth)) + coeff_opt[1]
+    axs[0].plot(x_smooth, y_opt_smooth,
+                color='orange',
+                linewidth=1)
+    y_opt = np.array(optimized_array_2d[3])
+    nlogn = x_vals * np.log2(x_vals)
+    coeff_opt = np.polyfit(nlogn, y_opt, 1)
+
+    x_smooth = np.linspace(min(set_size), max(set_size), 200)
+    y_opt_smooth = coeff_opt[0] * (x_smooth * np.log2(x_smooth)) + coeff_opt[1]
+    axs[0].plot(x_smooth, y_opt_smooth,
+                color='red',
+                linewidth=1)
+    axs[0].set_ylabel("Time (s)")
+    axs[0].set_xlabel("Set size")
+    axs[0].set_title("Optimized Quicksort")
+    #axs[0].set_xlim(x_min, x_max)
+    #axs[0].set_ylim(y_min, y_max)
+    axs[0].legend()
+
+    coeffs = np.polyfit(set_size, unoptimized_array_2d[0], 2)
+    x_smooth = np.linspace(min(set_size), max(set_size), 200)
+    y_smooth = np.polyval(coeffs, x_smooth)
+    eqn_ins = f"{coeffs[0]:.1e}x² + {coeffs[1]:.1e}x + {coeffs[2]:.1e}"
+    axs[1].plot(x_smooth, y_smooth, color='blue',label=f"Span[0:0] Fit (n^2): {eqn_ins}")
+    for i, span in enumerate(set_span):
+        axs[1].scatter(set_size, unoptimized_array_2d[i], label=f"Interval=[0:{span}]")
+
+    # Unoptimized: fit to n log n as well (same theory)
+    y_unopt = np.array(unoptimized_array_2d[3])
+    coeff_unopt = np.polyfit(nlogn, y_unopt, 1)
+
+    y_unopt_smooth = coeff_unopt[0] * (x_smooth * np.log2(x_smooth)) + coeff_unopt[1]
+
+    axs[1].plot(x_smooth, y_unopt_smooth,
+                color='red',
+                linewidth=1
+                )
+    axs[1].set_ylabel("Time (s)")
+    axs[1].set_xlabel("Set size")
+    axs[1].set_title("Unoptimized Quicksort")
+    #axs[1].set_xlim(x_min, x_max)
+    #axs[1].set_ylim(y_min, y_max)
+    axs[1].legend()
+
+    plt.show()
+if False:#Test Case 3
+    set_size = (100,500,1000,1500,3000,4000,5000,6000)
+    set_span = (0,1,2,4,8,16,32,100000)
+
+    optimized_array_2d = []
+
+    for span_idx, span in enumerate(set_span):
+        optimized_times = []
+
+        for size in set_size:
+            dummy_array = [rd.randint(0, max(1, span)) for test in range(size)]
+            my_array = np.array(dummy_array)
+
+            t = timeit.timeit(lambda: quicks_sort_optimize(my_array.copy()), number=10)/10
+            optimized_times.append(t)
+            print(size ,"SIZE DONE")
+
+        optimized_array_2d.append(optimized_times)
+        print(span,"SPAN DONE")
+
+    # Plot
+    fig, axs = plt.subplots(1, 1, figsize=(10,6))
+
+    for i, span in enumerate(set_span):
+        axs.scatter(set_size, optimized_array_2d[i], label=f"Span={span}")
+
+    axs.set_xlabel("Set size")
+    axs.set_ylabel("Time (s)")
+    axs.set_title("Optimized Quicksort Timing")
+    axs.legend()
+    plt.show()
