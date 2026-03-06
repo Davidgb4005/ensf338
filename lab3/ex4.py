@@ -174,8 +174,8 @@ if False:#Test Case 1
     plt.show()
 
 if True:#TestCase 2
-    set_size = (4000,8000,12000,16000,20000,25000,50000)
-    set_span = (1000000,1000000,1000000,1000000,1000000,1000000,10000000)
+    set_size = (200,250,25000)
+    set_span = (500,500,500)
 
     optimized_array_2d = []
     unoptimized_array_2d = []
@@ -210,7 +210,7 @@ if True:#TestCase 2
     axs[0].plot(x_smooth, y_opt_smooth,
                 color='orange',
                 linewidth=1)
-    y_opt = np.array(optimized_array_2d[3])
+    y_opt = np.array(optimized_array_2d[2])
     nlogn = x_vals * np.log2(x_vals)
     coeff_opt = np.polyfit(nlogn, y_opt, 1)
 
@@ -235,7 +235,7 @@ if True:#TestCase 2
         axs[1].scatter(set_size, unoptimized_array_2d[i], label=f"Interval=[0:{span}]")
 
     # Unoptimized: fit to n log n as well (same theory)
-    y_unopt = np.array(unoptimized_array_2d[3])
+    y_unopt = np.array(unoptimized_array_2d[2])
     coeff_unopt = np.polyfit(nlogn, y_unopt, 1)
 
     y_unopt_smooth = coeff_unopt[0] * (x_smooth * np.log2(x_smooth)) + coeff_unopt[1]

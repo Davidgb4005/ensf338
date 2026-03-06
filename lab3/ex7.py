@@ -61,4 +61,4 @@ plt.show()
 # After the first iteration, the standard binary search proceeds normally, so only the first step is affected.
 # So there is little effect by just changin the starting point as even if you pick the first
 # element it will only result 1 more iteration as the second iteration just would perform a regular
-# B search
+# B search if you weighted every split i would have a more noticable effect
